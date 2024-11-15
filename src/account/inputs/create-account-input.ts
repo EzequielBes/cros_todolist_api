@@ -4,16 +4,20 @@ import { IsString } from "class-validator"
 export class CreateAccountInput {
     @ApiProperty({
         description: 'email',
-        example: 'zz@gmail.com',
+        example: 'emailexemplo@gmail.com',
       })
       @IsString()
     email:string
     @ApiProperty({
         description: 'nome do usuario',
-        example: 'zzet',
+        example: 'Jon',
       })
       @IsString()
     username:string
+    @ApiProperty({
+        description: 'Password',
+        example: '******',
+      })
     @IsString()
     password:string
 
