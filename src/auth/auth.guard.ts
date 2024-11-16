@@ -1,6 +1,7 @@
 import {
   CanActivate,
   ExecutionContext,
+  HttpException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -24,14 +25,11 @@ export class AuthGuard implements CanActivate {
     if (isPublic) {
       return true;
     }
-
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
-
     if (!token) {
       throw new UnauthorizedException('Token not provided');
     }
-
     try {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.secret,
@@ -48,5 +46,8 @@ export class AuthGuard implements CanActivate {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
   }
+
+  
+  }
    
-}
+

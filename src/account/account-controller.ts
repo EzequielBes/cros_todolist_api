@@ -1,7 +1,8 @@
-import { Body, Controller, Header, Headers, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Header, Headers, Post, Put, Query } from "@nestjs/common";
 import { AccountService } from "./account-service";
 import { CreateAccountInput } from "./inputs/create-account-input";
 import { Public } from "src/auth/constants";
+import { UpdateAccountInput } from "./inputs/update-account-input";
 
 @Controller("account")
 export class AccountController {
@@ -22,8 +23,14 @@ export class AccountController {
   }
 
   @Put("update")
-  async update(@Body() body: {email:string, newEmail:string, newPassword:string, newUsername:string}, @Headers() token:any){
-    console.log(token)
-    await this.accountService.update(body, token.authorization)
+  async update(@Body() body: UpdateAccountInput, @Headers() token:any){
+    const idToken = token.authorization
+    await this.accountService.update(body, idToken)
+  }
+
+  @Delete("delete")
+  async delete(@Headers() token:any){
+    const idToken = token.authorization
+    await this.accountService.delete(idToken)
   }
 }
