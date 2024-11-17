@@ -39,7 +39,8 @@ export class MainTask extends Task {
       subtasks,
       id,
       updated_at,
-      status
+      status,
+      created_at
     );
   }
 

@@ -11,9 +11,12 @@ export abstract class Task {
         readonly status:boolean,
         readonly subtasks:SubTask[],
         readonly id: string = randomUUID(),
-        readonly created_at: Date = new Date(),
+        readonly created_at: Date,
         readonly updated_at?: Date
     ) {
+        if(!this.created_at){
+            this.created_at = new Date()
+        }
     }
 
     public addSubtask(subtask:SubTask):void {
