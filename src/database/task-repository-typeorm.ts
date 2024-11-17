@@ -70,7 +70,6 @@ export class TaskRepositoryTypeorm implements TaskRepository {
       relations:['subtasks']
     })
     if(!task)return
-    console.log(task)
     return task?.map((item) => MainTask.restore(
      item.id,
      item.owner_id,
