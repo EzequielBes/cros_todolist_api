@@ -5,7 +5,7 @@ import {
   ManyToOne,
   OneToMany,
   JoinColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from "typeorm";
 import { AccountEntity } from "./account.entity";
 import { SubTaskEntity } from "./subtask.entity";
@@ -42,8 +42,6 @@ export class MainTaskEntity {
   @JoinColumn({ name: "owner_id", referencedColumnName: "id" })
   owner: AccountEntity;
 
-  @OneToMany(() => SubTaskEntity, (subtask) => subtask.mainTask, {
-    cascade: true,
-  })
+  @OneToMany(() => SubTaskEntity, (subtask) => subtask.mainTask)
   subtasks: SubTaskEntity[];
 }

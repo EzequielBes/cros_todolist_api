@@ -6,7 +6,7 @@ import {
   ManyToOne,
   OneToMany,
   JoinColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from "typeorm";
 
 @Entity("subtasks")
@@ -14,8 +14,8 @@ export class SubTaskEntity {
   @PrimaryColumn()
   id: string;
 
-  @Column()
-  owner_task_id: string;
+  // @Column()
+  // owner_task_id: string;
 
   @Column()
   name: string;
@@ -38,15 +38,21 @@ export class SubTaskEntity {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => MainTaskEntity, (mainTask) => mainTask.subtasks, {
-    onDelete: "CASCADE",
-  })
+  @Column({ nullable: true })
+  main_task_id: string;
+
+  @Column({ nullable: true })
+  parent_sub_task_id: string;
+
+  @ManyToOne(() => MainTaskEntity, (maintask) => maintask.subtasks)
+  @JoinColumn({ name: "main_task_id", referencedColumnName: "id" })
   mainTask: MainTaskEntity;
 
   @ManyToOne(() => SubTaskEntity, (subtask) => subtask.children, {
     nullable: true,
     onDelete: "CASCADE",
   })
+  @JoinColumn({ name: "parent_sub_task_id", referencedColumnName: "id" })
   parentSubtask: SubTaskEntity;
 
   @OneToMany(() => SubTaskEntity, (subtask) => subtask.parentSubtask)
