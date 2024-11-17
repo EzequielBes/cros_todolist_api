@@ -6,8 +6,8 @@ import {
 import { Account } from "./account";
 import { AccountRepository } from "./account-respository";
 import { AuthService } from "src/auth/auth.service";
-import { CreateAccountInput } from "./inputs/create-account-input";
-import { UpdateAccountInput } from "./inputs/update-account-input";
+import { CreateAccountInput } from "./dto/create-account-input";
+import { UpdateAccountInput } from "./dto/update-account-input";
 
 @Injectable()
 export class AccountService {
@@ -59,7 +59,7 @@ export class AccountService {
     if(!findAcc) throw new HttpException("Account not finded", 404);
     const updatedAccount = {account_id: extractedId, email: input.email, username: input.username, password: input.password }
     await this.accountRepository.update(updatedAccount)
-    return "Conta foi atualizada com sucesso"
+    return 
   }
   async delete (token:string) {
     const id = await this.auth.decoded(token);

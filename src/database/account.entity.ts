@@ -2,30 +2,27 @@ import {
     Column,
     Entity,
     JoinColumn,
+    OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
     Unique,
   } from 'typeorm';
+import {MainTaskEntity} from './main-task.entity'
+  
+@Entity('account')
+@Unique(['email'])
+export class AccountEntity {
+  @PrimaryGeneratedColumn()
+  id: string;
 
-  
-  @Entity('account')
-  @Unique(['email'])
-  export class AccountEntity {
-    @PrimaryGeneratedColumn()
-    id: string;
-  
-    @Column()
-    username: string;
-  
-    @Column()
-    password: string;
-  
-    @Column()
-    email: string;
-  }
-// todo taks
-// uma task tem somente um dono
-// uma task tem infinitas subtasks
+  @Column()
+  username: string;
 
-// task principal tem o id do dono
-// taks secundarias tem id das task principal
+  @Column()
+  password: string;
+
+  @Column()
+  email: string;
+
+
+}

@@ -10,10 +10,12 @@ import { JwtStrategy } from "src/auth/jwt.strategy";
 @Module({
   imports: [DatabaseModule],
   controllers: [AccountController],
-  providers: [AccountService, {
-    provide:AccountRepository,
-    useClass:AccountRepositoryTypeorm
-  }, AuthService,JwtStrategy ],
-  exports: [AccountService],
+  providers: [AccountService, 
+    {
+      provide:AccountRepository,
+      useClass:AccountRepositoryTypeorm
+    }
+    ,AuthService,JwtStrategy ],
+  exports: [AccountService,AccountRepository],
 })
 export class AccountModule {}

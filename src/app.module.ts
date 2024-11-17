@@ -7,6 +7,7 @@ import { DatabaseModule } from "./database/database.module";
 import { AuthModule } from "./auth/auth.module";
 import { APP_GUARD } from "@nestjs/core";
 import { AuthGuard } from "./auth/auth.guard";
+import { TaskModuleModule } from "./tasks/tasks.module";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthGuard } from "./auth/auth.guard";
     }),
     DatabaseModule,
     AccountModule,
+    TaskModuleModule,
     AuthModule,
   ],
   controllers: [],

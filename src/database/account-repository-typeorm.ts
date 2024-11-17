@@ -39,6 +39,7 @@ export class AccountRepositoryTypeorm implements AccountRepository {
 
   async create(account: Account): Promise<void> {
     const accountToBeCreated = this.repository.create({
+      id: account.account_id,
       password: account.password,
       username: account.username,
       email: account.email,

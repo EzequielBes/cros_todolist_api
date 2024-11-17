@@ -2,6 +2,7 @@ import { DataSource } from 'typeorm';
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AccountRepositoryTypeorm } from './account-repository-typeorm';
+import { TaskRepositoryTypeorm } from './task-repository-typeorm';
 
 @Global()
 @Module({
@@ -20,7 +21,7 @@ import { AccountRepositoryTypeorm } from './account-repository-typeorm';
         }
       },
       inject: [ConfigService],
-    },
+    }
   ],
   exports: [DataSource],
 })
