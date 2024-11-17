@@ -6,6 +6,7 @@ import { AccountRepository } from "./account-respository";
 import { DatabaseModule } from "../database/database.module";
 import { AuthService } from "src/auth/auth.service";
 import { JwtStrategy } from "src/auth/jwt.strategy";
+import { AuthModule } from "@/auth/auth.module";
 
 @Module({
   imports: [DatabaseModule],
@@ -14,8 +15,7 @@ import { JwtStrategy } from "src/auth/jwt.strategy";
     {
       provide:AccountRepository,
       useClass:AccountRepositoryTypeorm
-    }
-    ,AuthService,JwtStrategy ],
+    }],
   exports: [AccountService,AccountRepository],
 })
 export class AccountModule {}

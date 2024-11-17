@@ -4,6 +4,7 @@ import {
     JoinColumn,
     OneToMany,
     OneToOne,
+    PrimaryColumn,
     PrimaryGeneratedColumn,
     Unique,
   } from 'typeorm';
@@ -12,7 +13,7 @@ import {MainTaskEntity} from './main-task.entity'
 @Entity('account')
 @Unique(['email'])
 export class AccountEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: string;
 
   @Column()
@@ -24,5 +25,6 @@ export class AccountEntity {
   @Column()
   email: string;
 
-
+  // @OneToMany(() => MainTaskEntity, (task) => task)
+  // children: SubTaskEntity[];
 }

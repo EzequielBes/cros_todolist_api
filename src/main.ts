@@ -9,6 +9,7 @@ async function bootstrap() {
   const swaggerConfig = new DocumentBuilder()
   .setTitle('API TODO')
   .setDescription('')
+  .addBearerAuth()
   .setVersion('0.0.1')
   .build();
 

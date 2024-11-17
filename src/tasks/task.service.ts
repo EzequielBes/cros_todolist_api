@@ -1,20 +1,44 @@
 import {
+  BadRequestException,
   Injectable,
 } from "@nestjs/common";
 import { AuthService } from "src/auth/auth.service";
-import { MainTask, Task } from "./task";
 import { AccountRepository } from "@/account/account-respository";
 import { TaskRepository } from "./task-repository";
+import { MainTask } from "./main-task";
+import { SubTask } from "./sub-task";
 
+export type InputCreateMainTask = {
+  token:string,
+  name:string,
+  description:string,
+  document?: any,
+  tag: string,
+}
+
+export type InputCreateSubTask = {
+  owner_task_id:string
+} & InputCreateMainTask
 
 @Injectable()
 export class TaskService {
     task = []
-  constructor(readonly accountRepository:AccountRepository, readonly taskRepository:TaskRepository) {}
+  constructor(readonly accountRepository:AccountRepository, readonly taskRepository:TaskRepository,private auth: AuthService) {}
 
-  async create(input:{email: string}): Promise<void> {
-    const account = await this.accountRepository.findByEmail(input.email)
-    const task = new MainTask(account.account_id,"name", "task.description", "task.tag", null, true,[], new Date(), new Date())
+  async createMainTask(input:InputCreateMainTask): Promise<void> {
+    const account_id = await this.auth.decoded(input.token)
+    const account = await this.accountRepository.findById(account_id)
+    if(!account) throw new BadRequestException('Account not found')
+    const task = new MainTask(account_id,input.name, input.description, input.tag,input.document)
+    await this.taskRepository.create(task)
+  }
+
+  async createSubTask(input:InputCreateSubTask): Promise<void> {
+    if(!input.owner_task_id)throw new BadRequestException('Owner_task_id is required')
+    const account_id = await this.auth.decoded(input.token)
+    const account = await this.accountRepository.findById(account_id)
+    if(!account) throw new BadRequestException('Account not found')
+    const task = new SubTask(input.owner_task_id,input.name, input.description, input.tag,input.document)
     await this.taskRepository.create(task)
   }
 

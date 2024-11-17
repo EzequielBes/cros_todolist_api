@@ -1,14 +1,21 @@
-import { MainTaskEntity } from './main-task.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn} from 'typeorm';
+import { MainTaskEntity } from "./main-task.entity";
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+  JoinColumn,
+  UpdateDateColumn
+} from "typeorm";
 
-
-@Entity('subtasks')
+@Entity("subtasks")
 export class SubTaskEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  id: string;
 
   @Column()
-  owner_task_id:string
+  owner_task_id: string;
 
   @Column()
   name: string;
@@ -19,25 +26,29 @@ export class SubTaskEntity {
   @Column({ default: false })
   isCompleted: boolean;
 
-   @Column()
+  @Column()
   tag: string;
 
-  @Column({ type: 'bytea' })
+  @Column({ type: "bytea", nullable: true })
   document: Buffer;
 
   @Column()
   created_at: Date;
 
-  @Column()
+  @UpdateDateColumn()
   updated_at: Date;
-  
 
-  @ManyToOne(() => MainTaskEntity, { nullable: true, onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'main_task_id' })
-  mainTask: MainTaskEntity | null;
+  @ManyToOne(() => MainTaskEntity, (mainTask) => mainTask.subtasks, {
+    onDelete: "CASCADE",
+  })
+  mainTask: MainTaskEntity;
 
+  @ManyToOne(() => SubTaskEntity, (subtask) => subtask.children, {
+    nullable: true,
+    onDelete: "CASCADE",
+  })
+  parentSubtask: SubTaskEntity;
 
-  @ManyToOne(() => SubTaskEntity, { nullable: true, onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'parent_subtask_id' })
-  parentSubTask: SubTaskEntity | null;
+  @OneToMany(() => SubTaskEntity, (subtask) => subtask.parentSubtask)
+  children: SubTaskEntity[];
 }

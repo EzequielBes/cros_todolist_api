@@ -1,12 +1,11 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { IsOptional, IsString } from "class-validator";
 
-export class CreateTaskDTO {
-  @IsString()
-  email:string
+export class UpdateTaskDTO {
 
   @ApiProperty({ description: 'Título da tarefa', example: 'Fazer cafe da manha' })
   @IsString()
+  @IsOptional()
   title: string;
 
   @ApiPropertyOptional({ description: 'Descrição da tarefa', example: 'Fazer um cafe da manha completo' })
@@ -25,6 +24,13 @@ export class CreateTaskDTO {
   tagPrioridade: string;
 
   @ApiPropertyOptional({ 
+    description: 'status da tarefa', 
+    type: 'string', 
+  })
+  @IsOptional()
+  status: any; 
+
+  @ApiPropertyOptional({ 
     description: 'Documento relacionado à tarefa', 
     type: 'string', 
     format: 'binary',
@@ -32,4 +38,5 @@ export class CreateTaskDTO {
   })
   @IsOptional()
   document: any; 
+
 }

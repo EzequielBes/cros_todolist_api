@@ -15,6 +15,7 @@ import { TaskModuleModule } from "./tasks/tasks.module";
       isGlobal: true,
       load: [typeorm],
     }),
+    AuthModule,
     DatabaseModule,
     AccountModule,
     TaskModuleModule,

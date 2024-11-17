@@ -7,6 +7,7 @@ import { TaskRepository } from "./task-repository";
 import { TaskService } from "./task.service";
 import { AccountModule } from "@/account/account.module";
 import { TaskRepositoryTypeorm } from "@/database/task-repository-typeorm";
+import { AuthModule } from "@/auth/auth.module";
 
 
 @Module({
