@@ -14,9 +14,6 @@ export class SubTaskEntity {
   @PrimaryColumn()
   id: string;
 
-  // @Column()
-  // owner_task_id: string;
-
   @Column()
   name: string;
 
@@ -24,7 +21,7 @@ export class SubTaskEntity {
   description: string;
 
   @Column({ default: false })
-  isCompleted: boolean;
+  status: boolean;
 
   @Column()
   tag: string;

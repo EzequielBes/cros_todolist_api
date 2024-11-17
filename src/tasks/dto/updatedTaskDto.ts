@@ -2,11 +2,11 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsOptional, IsString } from "class-validator";
 
 export class UpdateTaskDTO {
-
+   task_id:string 
   @ApiProperty({ description: 'Título da tarefa', example: 'Fazer cafe da manha' })
   @IsString()
   @IsOptional()
-  title: string;
+  name: string;
 
   @ApiPropertyOptional({ description: 'Descrição da tarefa', example: 'Fazer um cafe da manha completo' })
   @IsString()
@@ -16,7 +16,7 @@ export class UpdateTaskDTO {
   @ApiPropertyOptional({ description: 'Categoria da tarefa', example: 'Rotina' })
   @IsString()
   @IsOptional()
-  category: string;
+  tag: string;
 
   @ApiPropertyOptional({ description: 'Prioridade da tarefa', example: 'Baixa' })
   @IsString()
@@ -28,7 +28,7 @@ export class UpdateTaskDTO {
     type: 'string', 
   })
   @IsOptional()
-  status: any; 
+  status: boolean; 
 
   @ApiPropertyOptional({ 
     description: 'Documento relacionado à tarefa', 
@@ -37,6 +37,6 @@ export class UpdateTaskDTO {
     example: 'arquivo.pdf'
   })
   @IsOptional()
-  document: any; 
+  document: Buffer; 
 
 }

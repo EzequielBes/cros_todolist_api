@@ -31,5 +31,5 @@ export class CreateTaskDTO {
     example: 'arquivo.pdf'
   })
   @IsOptional()
-  document: any; 
+  document: Buffer; 
 }

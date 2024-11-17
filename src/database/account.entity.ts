@@ -1,11 +1,7 @@
 import {
     Column,
     Entity,
-    JoinColumn,
-    OneToMany,
-    OneToOne,
     PrimaryColumn,
-    PrimaryGeneratedColumn,
     Unique,
   } from 'typeorm';
 import {MainTaskEntity} from './main-task.entity'
@@ -25,6 +21,4 @@ export class AccountEntity {
   @Column()
   email: string;
 
-  // @OneToMany(() => MainTaskEntity, (task) => task)
-  // children: SubTaskEntity[];
 }

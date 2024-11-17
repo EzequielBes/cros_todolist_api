@@ -17,20 +17,94 @@ export class TaskRepositoryTypeorm implements TaskRepository {
     this.repositorySubTask = this.dataSource.getRepository(SubTaskEntity);
   }
 
-  findAllTasks(email: string): Promise<Task | null> {
-    throw new Error("Method not implemented.");
+  async findAllTasks(owner_id:string): Promise<Task[] | null> {
+    const maintaskDb = await this.repositoryMainTask.find({
+      where:{owner_id:owner_id},
+      relations:['subtasks']
+    })
+
+    const maintasks = maintaskDb.map(item => {
+      const subtasks = item.subtasks?.map((sub) =>
+        SubTask.restore(
+          sub.id,
+          sub.name,
+          sub.description,
+          sub.tag,
+          sub.document,
+          sub.status,
+          [],
+          sub.created_at,
+          sub.updated_at,
+          sub.main_task_id,
+          sub.parent_sub_task_id,
+        ),
+      );
+
+      return MainTask.restore(
+        item.id,
+        item.owner_id,
+        item.name,
+        item.description,
+        item.tag,
+        item.document,
+        item.status,
+        subtasks ?? [],
+        item.created_at,
+        item.updated_at,
+      )
+    })
+    return maintasks
   }
-  async findTaskById(id: string): Promise<Task | null> {
-    const mainTask = await this.findMainTaskById(id);
+
+  async findTaskById(id: string, owner_id:string): Promise<Task | null> {
+    const mainTask = await this.findMainTaskById(id,owner_id);
     if (mainTask) return mainTask;
     return await this.findSubTaskById(id);
   }
-  findByTag(): Promise<Task | null> {
-    throw new Error("Method not implemented.");
+
+  async findByTag(tag:string): Promise<MainTask[] | null> {
+   const task = await this.repositoryMainTask.find({
+      where:{
+        tag:tag
+      },
+      relations:['subtasks']
+    })
+    if(!task)return
+    console.log(task)
+    return task?.map((item) => MainTask.restore(
+     item.id,
+     item.owner_id,
+     item.name,
+     item.description,
+     item.tag,
+     item?.document,
+     item.status,
+     item.subtasks?.map(sub => SubTask.restore(
+      sub?.id,
+      sub?.name,
+      sub?.description,
+      sub?.tag,
+      sub?.document,
+      sub?.status,
+      [],
+      sub.created_at,
+      sub.updated_at,
+      sub.main_task_id,
+      sub.parent_sub_task_id,
+    )),
+     item.created_at,
+     item.updated_at,
+   ))
+    
   }
 
-  async findMainTaskById(id: string): Promise<MainTask> {
-    const maintask = await this.repositoryMainTask.findOneById(id);
+  async findMainTaskById(id: string, owner_id:string): Promise<MainTask> {
+    const maintask = await this.repositoryMainTask.findOne({
+      where: {
+        id: id,
+        owner_id: owner_id
+      }
+    });
     if (!maintask) return;
     const subtasks = maintask.subtasks?.map((sub) =>
       SubTask.restore(
@@ -39,7 +113,7 @@ export class TaskRepositoryTypeorm implements TaskRepository {
         sub.description,
         sub.tag,
         sub.document,
-        sub.isCompleted,
+        sub.status,
         subtasks,
         sub.created_at,
         sub.updated_at,
@@ -61,6 +135,54 @@ export class TaskRepositoryTypeorm implements TaskRepository {
     );
   }
 
+  async findTaskByStatus(status: boolean):Promise<MainTask[] | null> {
+    const task = await this.repositoryMainTask.find({
+      where:{
+        status:!!status
+      },
+      relations:['subtasks']
+    })
+    if(!task)return
+
+    return task.map((item) => MainTask.restore(
+     item.id,
+     item.owner_id,
+     item.name,
+     item.description,
+     item.tag,
+     item.document,
+     item.status,
+     item.subtasks?.map(sub => SubTask.restore(
+      sub?.id,
+      sub?.name,
+      sub.description,
+      sub.tag,
+      sub.document,
+      sub.status,
+      item.subtasks?.map(sub => SubTask.restore(
+        sub?.id,
+        sub?.name,
+        sub.description,
+        sub.tag,
+        sub.document,
+        sub.status,
+        [],
+        sub.created_at,
+        sub.updated_at,
+        sub.main_task_id,
+        sub.parent_sub_task_id,
+      )),
+      sub.created_at,
+      sub.updated_at,
+      sub.main_task_id,
+      sub.parent_sub_task_id,
+    )),
+     item.created_at,
+     item.updated_at,
+   ))
+    
+  }
+
   async findSubTaskById(id: string): Promise<SubTask> {
     const subtask = await this.repositorySubTask.findOneById(id);
     if (!subtask) return;
@@ -71,7 +193,7 @@ export class TaskRepositoryTypeorm implements TaskRepository {
         sub.description,
         sub.tag,
         sub.document,
-        sub.isCompleted,
+        sub.status,
         subtasks,
         sub.created_at,
         sub.updated_at,
@@ -85,7 +207,7 @@ export class TaskRepositoryTypeorm implements TaskRepository {
       subtask.description,
       subtask.tag,
       subtask.document,
-      subtask.isCompleted,
+      subtask.status,
       subtasks ?? [],
       subtask.created_at,
       subtask.updated_at,
@@ -103,10 +225,28 @@ export class TaskRepositoryTypeorm implements TaskRepository {
     }
   }
 
-  update(updatedAccount: Task): Promise<void> {
-    throw new Error("Method not implemented.");
+  async update(updatedTask: Task): Promise<void> {
+    if(updatedTask instanceof MainTask)
+    await this.repositoryMainTask.update(updatedTask.id, {
+      document:updatedTask.document,
+      name: updatedTask.name,
+      status: !!updatedTask.status,
+      description: updatedTask.description,
+      tag: updatedTask.tag,
+      updated_at: updatedTask.updated_at
+    });
+    await this.repositorySubTask.update(updatedTask.id, {
+      document:updatedTask.document,
+      name: updatedTask.name,
+      status: !!updatedTask.status,
+      description: updatedTask.description,
+      tag: updatedTask.tag,
+      updated_at: updatedTask.updated_at
+    });
   }
-  delete(account_id: string): Promise<void> {
-    throw new Error("Method not implemented.");
+
+  async delete(id: string,owner_id:string): Promise<void> {
+    await this.repositoryMainTask.delete({id:id,owner_id:owner_id})
+    await this.repositorySubTask.delete({id:id})
   }
 }

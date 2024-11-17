@@ -10,7 +10,7 @@ export class AuthService {
     private validate: JwtStrategy,
   ) {}
 
-  async signIn(payload): Promise<any> {
+  async signIn(payload): Promise<{access_token:string}> {
     const token = {
       access_token: await this.jwtService.signAsync(payload),
     };

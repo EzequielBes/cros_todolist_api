@@ -12,8 +12,11 @@ export class SubTask extends Task {
     readonly parent_sub_task_id?: string,
     subtasks: SubTask[] = [],
     readonly id: string = randomUUID(),
+    updated_at?:Date,
+    status: boolean = false,
+    created_at?:Date
   ) {
-    super(name, description, tag, document, subtasks, id);
+    super(name, description, tag, document,status, subtasks, id, created_at,updated_at);
   }
 
   static restore(
@@ -29,7 +32,7 @@ export class SubTask extends Task {
     main_task_id: string,
     parent_task_id: string,
   ) {
-    const task = new SubTask(
+    return new SubTask(
       name,
       description,
       tag,
@@ -38,10 +41,30 @@ export class SubTask extends Task {
       parent_task_id,
       subtasks,
       id,
+      updated_at,
+      status,
+      created_at
     );
-    task._updated_at = updated_at;
-    task._created_at = created_at;
-    task._status = status;
-    return task;
+  }
+
+  public update(input:{
+    name: string,
+    description: string,
+    tag: string,
+    document: Buffer,
+    status: boolean}):Task {
+      return new SubTask(
+        input.name ?? this.name,
+        input.description ?? this.description,
+        input.tag ?? this.tag,
+        input.document ?? this.document,
+        this.main_task_id,
+        this.parent_sub_task_id,
+        this.subtasks,
+        this.id,
+        new Date(),
+        input.status,
+        this.created_at
+      )
   }
 }
