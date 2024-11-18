@@ -25,6 +25,7 @@ services:
       DB_USER: admin
       DB_PASSWORD: admin
       DB_NAME: todo
+      SECRET_KEY: ffrrttsfawqfvxzccdzzd
     networks:
       - todo-rede
 
