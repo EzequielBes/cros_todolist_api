@@ -4,7 +4,7 @@ Este projeto é uma API desenvolvida utilizando o framework **NestJS**, que impl
 
 ---
 
-## 🚀 **Configuração Inicial**
+##  **Configuração Inicial**
 
 Antes de iniciar o projeto, certifique-se de ter instalado:
 
@@ -70,11 +70,11 @@ docker compose down
 
  Tecnologias Utilizadas
 
-    NestJS: Framework Node.js para construção de APIs escaláveis.
-    PostgreSQL: Banco de dados relacional.
-    TypeScript: Linguagem tipada para desenvolvimento robusto.
-    Swagger: Documentação interativa para APIs.
-    Docker: Containerização para consistência entre ambientes.
+    NestJS
+    PostgreSQL
+    TypeScript
+    Swagger 
+    Docker
 
  Sobre o Projeto
 
