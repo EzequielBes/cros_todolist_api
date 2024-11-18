@@ -15,7 +15,9 @@ Antes de iniciar o projeto, certifique-se de ter instalado:
 Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis (ajuste conforme necessário):
 
 ```env
-# Conexão com o Banco de Dados
+# Conexão com o Banco de Dados e configuração do jwt token
+passar no .env
+
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=admin
