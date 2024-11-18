@@ -4,7 +4,7 @@ import { Task } from "./task";
 
 export class MainTask extends Task {
   constructor(
-    readonly owner_id: string, // id da pessoa dona
+    readonly owner_id: string,
     readonly name: string,
     readonly description: string,
     readonly tag: string,

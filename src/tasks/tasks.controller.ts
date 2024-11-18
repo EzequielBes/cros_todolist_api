@@ -1,11 +1,13 @@
 import { Controller, Post, Body, UseInterceptors, UploadedFile, Get, Put, Delete, Headers, Param, Header, Query } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { InputCreateMainTask, InputCreateSubTask, TaskService } from "./task.service";
 import { UpdateTaskDTO } from "./dto/updatedTaskDto";
 import { MainTask } from "./main-task";
+import { CreateTaskDTO } from "./dto/createTaskDTO";
+import { GetFilteredDto } from "./dto/getFilteredDto";
 
-export type InputCreateMainTaskDTO = Omit<InputCreateMainTask, 'document'>;
+// export type InputCreateMainTaskDTO = Omit<InputCreateMainTask, 'document'>;
 export type InputCreateSubTaskDTO = Omit<InputCreateSubTask, 'document'>;
 
 @ApiTags("Tasks") 
@@ -25,11 +27,11 @@ export class TaskController {
   })
   @ApiResponse({
     status: 400,
-    description: "Erro na valida��o dos dados.",
+    description: "Erro na validação dos dados.",
   })
   @ApiResponse({
     status: 401,
-    description: "Token de autentica��o inv�lido ou ausente.",
+    description: "Token de autenticação invalido ou ausente.",
   })
   @ApiResponse({
     status: 500,
@@ -38,7 +40,7 @@ export class TaskController {
   @Post("create")
   @UseInterceptors(FileInterceptor("document"))
   async createTask(
-    @Body() input: InputCreateMainTaskDTO,
+    @Body() input: CreateTaskDTO,
     @UploadedFile() document: Express.Multer.File,
     @Headers() token: any
   ) {
@@ -60,11 +62,11 @@ export class TaskController {
   })
   @ApiResponse({
     status: 400,
-    description: "Erro na valida��o dos dados.",
+    description: "Erro na validalido dos dados.",
   })
   @ApiResponse({
     status: 401,
-    description: "Token de autentica��o inv�lido ou ausente.",
+    description: "Token de autenticação invalido ou ausente.",
   })
   @Post("create/subtask")
   @UseInterceptors(FileInterceptor("document"))
@@ -82,16 +84,16 @@ export class TaskController {
 
   @ApiOperation({
     summary: "Get all tasks",
-    description: "Retorna todas as tarefas do usu�rio autenticado.",
+    description: "Retorna todas as tarefas do usuario autenticado.",
   })
   @ApiResponse({
     status: 200,
     description: "Lista de tarefas retornada com sucesso.",
-    type: [MainTask]
   })
+  
   @ApiResponse({
     status: 401,
-    description: "Token de autentica��o inv�lido ou ausente.",
+    description: "Token de autenticao invalido ou ausente.",
   })
   @Get("getall")
   async getAllTasks(@Headers() token: {authorization: string}) {
@@ -108,20 +110,20 @@ export class TaskController {
   })
   @ApiResponse({
     status: 400,
-    description: "Erro na valida��o dos par�metros.",
+    description: "Erro na validaçãoo dos parametros.",
   })
   @ApiResponse({
     status: 401,
-    description: "Token de autentica��o inv�lido ou ausente.",
+    description: "Token de autenticação invalido ou ausente.",
   })
   @Get("getFilteredTasks")
-  async getFilteredTasks(@Query() params : {type: string, value: string}, @Headers() token: {authorization: string}) {
+  async getFilteredTasks(@Query() params : GetFilteredDto, @Headers() token: any) {
     return await this.taskService.findByGroup(params.type, params.value, token.authorization);
   }
 
   @ApiOperation({
     summary: "Delete a task",
-    description: "Deleta uma tarefa espec�fica do usu�rio autenticado.",
+    description: "Deleta uma tarefa especefica do usuario autenticado.",
   })
   @ApiResponse({
     status: 200,
@@ -129,11 +131,11 @@ export class TaskController {
   })
   @ApiResponse({
     status: 400,
-    description: "Erro na valida��o dos dados.",
+    description: "Erro na validaçãoo dos dados.",
   })
   @ApiResponse({
     status: 401,
-    description: "Token de autentica��o inv�lido ou ausente.",
+    description: "Token de autenticaçãoo invalido ou ausente.",
   })
   @Delete("delete")
   async deleteTask(@Body() input, @Headers() token: {authorization: string}) {
@@ -142,7 +144,7 @@ export class TaskController {
 
   @ApiOperation({
     summary: "Update a task",
-    description: "Atualiza os detalhes de uma tarefa espec�fica.",
+    description: "Atualiza os detalhes de uma tarefa especifica.",
   })
   @ApiConsumes("multipart/form-data") 
   @ApiResponse({
@@ -151,11 +153,11 @@ export class TaskController {
   })
   @ApiResponse({
     status: 400,
-    description: "Erro na valida��o dos dados.",
+    description: "Erro na validação dos dados.",
   })
   @ApiResponse({
     status: 401,
-    description: "Token de autentica��o inv�lido ou ausente.",
+    description: "Token de autenticação invalido ou ausente.",
   })
   @ApiResponse({
     status: 500,

@@ -7,22 +7,22 @@ export class CreateTaskDTO {
 
   @ApiProperty({ description: 'Título da tarefa', example: 'Fazer cafe da manha' })
   @IsString()
-  title: string;
+  name: string;
 
   @ApiPropertyOptional({ description: 'Descrição da tarefa', example: 'Fazer um cafe da manha completo' })
   @IsString()
   @IsOptional()
   description: string;
 
-  @ApiPropertyOptional({ description: 'Categoria da tarefa', example: 'Rotina' })
+  @ApiPropertyOptional({ description: 'tag da tarefa', example: 'Rotina' })
   @IsString()
   @IsOptional()
-  category: string;
+  tag: string;
 
-  @ApiPropertyOptional({ description: 'Prioridade da tarefa', example: 'Baixa' })
+  @ApiPropertyOptional({ description: 'status da tarefa', example: 'true -- concluido' })
   @IsString()
   @IsOptional()
-  tagPrioridade: string;
+  status: string;
 
   @ApiPropertyOptional({ 
     description: 'Documento relacionado à tarefa', 
