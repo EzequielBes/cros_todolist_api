@@ -6,6 +6,11 @@ import { UpdateTaskDTO } from "./dto/updatedTaskDto";
 import { MainTask } from "./main-task";
 import { CreateTaskDTO } from "./dto/createTaskDTO";
 import { GetFilteredDto } from "./dto/getFilteredDto";
+import { CreateSubTaskDTO } from "./dto/createSubTaskDTO";
+import { DeleteTaskDto } from "./dto/deleteTaskDto";
+import {  GetAuthorization } from "./dto/getAllTaskDTO";
+import { Task } from "./task";
+import { ResponseTask } from "./dto/responseTask.dto";
 
 // export type InputCreateMainTaskDTO = Omit<InputCreateMainTask, 'document'>;
 export type InputCreateSubTaskDTO = Omit<InputCreateSubTask, 'document'>;
@@ -42,7 +47,7 @@ export class TaskController {
   async createTask(
     @Body() input: CreateTaskDTO,
     @UploadedFile() document: Express.Multer.File,
-    @Headers() token: any
+    @Headers() token: GetAuthorization
   ) {
     return await this.taskService.createMainTask({
       ...input,
@@ -71,9 +76,9 @@ export class TaskController {
   @Post("create/subtask")
   @UseInterceptors(FileInterceptor("document"))
   async createSubTask(
-    @Body() input: InputCreateSubTaskDTO,
+    @Body() input: CreateSubTaskDTO,
     @UploadedFile() document: Express.Multer.File,
-    @Headers() token: any
+    @Headers() token: GetAuthorization
   ) {
     return await this.taskService.createSubTask({
       ...input,
@@ -89,6 +94,7 @@ export class TaskController {
   @ApiResponse({
     status: 200,
     description: "Lista de tarefas retornada com sucesso.",
+    type: [ResponseTask]
   })
   
   @ApiResponse({
@@ -96,13 +102,13 @@ export class TaskController {
     description: "Token de autenticao invalido ou ausente.",
   })
   @Get("getall")
-  async getAllTasks(@Headers() token: {authorization: string}) {
+  async getAllTasks(@Headers() token: GetAuthorization) {
     return await this.taskService.getAll(token.authorization);
   }
 
   @ApiOperation({
     summary: "Get grouped tasks",
-    description: "Retorna as tarefas agrupadas por categorias.",
+    description: "Retorna as tarefas agrupadas por categorias. ",
   })
   @ApiResponse({
     status: 200,
@@ -117,7 +123,7 @@ export class TaskController {
     description: "Token de autenticação invalido ou ausente.",
   })
   @Get("getFilteredTasks")
-  async getFilteredTasks(@Query() params : GetFilteredDto, @Headers() token: any) {
+  async getFilteredTasks(@Query() params : GetFilteredDto, @Headers() token: GetAuthorization) {
     return await this.taskService.findByGroup(params.type, params.value, token.authorization);
   }
 
@@ -138,7 +144,7 @@ export class TaskController {
     description: "Token de autenticaçãoo invalido ou ausente.",
   })
   @Delete("delete")
-  async deleteTask(@Body() input, @Headers() token: {authorization: string}) {
+  async deleteTask(@Body() input: DeleteTaskDto, @Headers() token: GetAuthorization) {
     return await this.taskService.delete(input.id, token.authorization);
   }
 
@@ -165,7 +171,7 @@ export class TaskController {
   })
   @Put("update")
   @UseInterceptors(FileInterceptor("document"))
-  async updateTask(@Body() input: UpdateTaskDTO, @Headers() token: any, @UploadedFile() document: Express.Multer.File) {
+  async updateTask(@Body() input: UpdateTaskDTO, @Headers() token: GetAuthorization, @UploadedFile() document: Express.Multer.File) {
     return await this.taskService.update({...input, document: document?.buffer}, token.authorization);
   }
 }

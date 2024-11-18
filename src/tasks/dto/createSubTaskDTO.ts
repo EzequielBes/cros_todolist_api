@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
-export class CreateTaskDTO {
+export class CreateSubTaskDTO {
   @ApiProperty({ description: 'Título da tarefa', example: 'Fazer cafe da manha' })
   @IsString()
   name: string;
@@ -29,4 +29,8 @@ export class CreateTaskDTO {
   })
   @IsOptional()
   document: Buffer; 
+
+  @ApiPropertyOptional({ description: 'Id da task pai', example: 'ddd9d8dfac' })
+  @IsString()
+  owner_task_id: string;
 }
