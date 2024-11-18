@@ -13,7 +13,7 @@ const config: DataSourceOptions = {
   database: `${process.env.DB_NAME}`,
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
   migrations: [__dirname + '/../**/migrations/*{.ts,.js}'],
-  synchronize: false,
+  synchronize: true,
 };
 
 export default registerAs('typeorm', () => config);

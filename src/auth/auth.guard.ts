@@ -1,7 +1,6 @@
 import {
   CanActivate,
   ExecutionContext,
-  HttpException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -9,7 +8,7 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { IS_PUBLIC_KEY, jwtConstants } from './constants';
-import * as jwt from 'jsonwebtoken'
+
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
@@ -35,7 +34,7 @@ export class AuthGuard implements CanActivate {
         secret: jwtConstants.secret,
       });
       request['user'] = payload; 
-    } catch (err) {
+    } catch {
       throw new UnauthorizedException('Invalid token');
     }
 

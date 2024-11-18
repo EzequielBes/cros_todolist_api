@@ -16,7 +16,7 @@ export class CreateAccountInput {
   username: string;
   @ApiProperty({
     description: "Password",
-    example: "******",
+    example: "Strong@1234",
   })
   @IsStrongPassword()
   password: string;
