@@ -84,3 +84,5 @@ Este projeto foi desenvolvido para demonstrar habilidades com:
     Implementação de Autenticação JWT.
     Configuração de um ambiente completo usando Docker.
     Documentação clara e interativa com Swagger.
+```
+![image](https://github.com/user-attachments/assets/853a4a2f-76cc-4ad2-b143-7dcbe4eeeebc)
